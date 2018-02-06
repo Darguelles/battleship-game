@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import ReactDOM from "react-dom";
 import {Button, Icon} from 'react-materialize';
 import './HomeContainer.scss'
 
@@ -8,25 +7,26 @@ class HomeContainer extends Component {
         super();
         this.state = {
             title: "",
-            hey: [ ]
+            hey: []
         };
     }
 
     render() {
         return (
-            <div id="home-container" className={'home'}>
+            <div className={'content home'}>
+                <div className={'row button-container center'}>
+                    <div className={'col l12 m12 s12'}>
+                        <Button waves='light' className={'button'}>New game<Icon left>save</Icon></Button>
+                    </div>
+                    <div className={'col l12 m12 s12'}>
+                        <Button waves='light' className={'button'}>Load game<Icon left>save</Icon></Button>
+                    </div>
 
-                <label>Hello from home container</label>
-
-                <Button waves='light'>New game<Icon left>save</Icon></Button>
-                <Button waves='light'>Load game<Icon left>save</Icon></Button>
-
+                </div>
             </div>
+
         );
     }
 }
 
 export default HomeContainer;
-
-const wrapper = document.getElementById("main-content");
-wrapper ? ReactDOM.render(<HomeContainer/>, wrapper) : false;

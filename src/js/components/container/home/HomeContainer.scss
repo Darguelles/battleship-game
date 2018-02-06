@@ -1,5 +1,12 @@
 .home {
-  label{
-    color: red;
+  height: 100%;
+  .button-container {
+    position: absolute;
+    width: 100%;
+    top: 40%;
+    .button{
+      margin: 1em;
+    }
   }
+
 }
