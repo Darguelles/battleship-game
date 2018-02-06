@@ -1,5 +1,10 @@
 const path = require("path");
 const HtmlWebPackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+const cssRules = [
+    { loader: 'css-loader' },
+];
 
 module.exports = {
     entry: ["./src/js/app.js"],
@@ -12,6 +17,14 @@ module.exports = {
     },
     module: {
         rules: [
+            {
+                test: /\.css$/i,
+                issuer: [{ not: [{ test: /\.html$/i }] }],
+                use:ExtractTextPlugin.extract({
+                    fallback: 'style-loader',
+                    use: cssRules
+                }),
+            },
             {
                 test: /\.js$/,
                 exclude: /node_modules/,
@@ -36,13 +49,27 @@ module.exports = {
                 test: /\.js$/,
                 exclude: /node_modules/,
                 use: ['eslint-loader']
+            },
+            {
+                test: /\.scss$/,
+                use: ['style-loader', 'css-loader', 'sass-loader'],
+                issuer: /\.[tj]s$/i
+            },
+            {
+                test: /\.scss$/,
+                use: ['css-loader', 'sass-loader'],
+                issuer: /\.html?$/i
             }
         ]
+
     },
     plugins: [
         new HtmlWebPackPlugin({
             template: "./src/index.html",
             filename: "./index.html"
+        }),
+        new ExtractTextPlugin('public/style.css', {
+            allChunks: true
         })
     ]
 };

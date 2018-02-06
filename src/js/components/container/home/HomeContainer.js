@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import ReactDOM from "react-dom";
-import {Button, Icon} from 'react-materialize'
+import {Button, Icon} from 'react-materialize';
+import './HomeContainer.scss'
 
 class HomeContainer extends Component {
     constructor() {
@@ -13,7 +14,9 @@ class HomeContainer extends Component {
 
     render() {
         return (
-            <div id="home-container">
+            <div id="home-container" className={'home'}>
+
+                <label>Hello from home container</label>
 
                 <Button waves='light'>New game<Icon left>save</Icon></Button>
                 <Button waves='light'>Load game<Icon left>save</Icon></Button>
