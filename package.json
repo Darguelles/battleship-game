@@ -4,7 +4,8 @@
   "description": "Battleship game for web ",
   "main": "index.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -17,6 +18,10 @@
   },
   "homepage": "https://gitlab.com/diegoarguelles/battleship-game#README",
   "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
     "webpack": "^3.10.0"
   }
 }
