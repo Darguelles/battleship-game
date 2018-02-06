@@ -1,0 +1,22 @@
+{
+  "name": "battleship-game",
+  "version": "1.0.0",
+  "description": "Battleship game for web ",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/diegoarguelles/battleship-game.git"
+  },
+  "author": "Diego Arguelles",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/diegoarguelles/battleship-game/issues"
+  },
+  "homepage": "https://gitlab.com/diegoarguelles/battleship-game#README",
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
+}
