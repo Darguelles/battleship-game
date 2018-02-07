@@ -1,0 +1,72 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PlayerInfo > presentation behavior should renders correctly 1`] = `
+<div
+  className="teal lighten-5 black-text card"
+  id="card-player-info"
+>
+  <div
+    className="card-content"
+  >
+    <div>
+      <div
+        className="player-info"
+      >
+        <h6>
+          Turns
+        </h6>
+        <label
+          id="lbl-attempts"
+        />
+        <div
+          className="progress lighten-5"
+        >
+          <div
+            className=""
+            style={undefined}
+          />
+        </div>
+        <h6>
+          Hits
+        </h6>
+        <label
+          className="hit"
+          id="lbl-hits"
+        />
+        <h6>
+          Failures
+        </h6>
+        <label
+          className="failure"
+          id="lbl-failures"
+        />
+        <h6>
+          Start time
+        </h6>
+        <label
+          id="lbl-starttime"
+        />
+        <h6>
+          Emd time
+        </h6>
+        <label
+          id="lbl-endtime"
+        />
+      </div>
+    </div>
+  </div>
+  <div
+    className="card-reveal"
+  >
+    <span
+      className="card-title grey-text text-darken-4"
+    >
+      <i
+        className="material-icons right"
+      >
+        close
+      </i>
+    </span>
+  </div>
+</div>
+`;

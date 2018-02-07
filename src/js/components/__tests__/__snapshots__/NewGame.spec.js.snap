@@ -1,0 +1,135 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NewGame > container behavior should pass a selected value to the onChange function 1`] = `
+<Modal
+  actions={
+    <Button
+      className="button"
+      node="button"
+      onClick={[Function]}
+      waves="light"
+    >
+      Play!
+      <Icon
+        left={true}
+      >
+        done
+      </Icon>
+    </Button>
+  }
+  bottomSheet={false}
+  fixedFooter={false}
+  header="Create game"
+  modalOptions={Object {}}
+  trigger={
+    <Button
+      className="button"
+      node="button"
+      waves="light"
+    >
+      New game
+      <Icon
+        left={true}
+      >
+        play_arrow
+      </Icon>
+    </Button>
+  }
+>
+  <Row>
+    <Input
+      checked={false}
+      id="game_name"
+      l={6}
+      label="Game name"
+      m={12}
+      name="gameName"
+      onChange={[Function]}
+      s={12}
+      type="text"
+      validate={true}
+      value=""
+    />
+    <Input
+      checked={false}
+      defaultValue="1"
+      id="players"
+      l={6}
+      label="Players"
+      m={12}
+      name="players"
+      onChange={[Function]}
+      s={12}
+      type="number"
+      value="1"
+    />
+    <Input
+      checked={false}
+      defaultValue="2"
+      id="level-select"
+      l={6}
+      label="Level"
+      m={12}
+      onChange={[Function]}
+      s={12}
+      type="select"
+      value="50"
+    >
+      <option
+        disabled={true}
+        value="Choose..."
+      >
+        Choose level
+      </option>
+      <option
+        value="INFINITE"
+      >
+        Easy
+      </option>
+      <option
+        value="100"
+      >
+        Medium
+      </option>
+      <option
+        value="50"
+      >
+        Hard
+      </option>
+      <option
+        value="0"
+      >
+        Custom
+      </option>
+    </Input>
+    <Input
+      checked={false}
+      disabled={true}
+      id="attempts"
+      l={6}
+      label="Attempts"
+      m={12}
+      name="attempts"
+      onChange={[Function]}
+      s={12}
+      type="text"
+      value="50"
+    />
+  </Row>
+</Modal>
+`;
+
+exports[`NewGame > container behavior should renders correctly 1`] = `
+<button
+  className="btn waves-effect waves-light button"
+  disabled={false}
+  onClick={[Function]}
+>
+  New game
+  <i
+    className="material-icons left"
+  >
+    play_arrow
+  </i>
+</button>
+`;
