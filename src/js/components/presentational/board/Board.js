@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import './Board.scss'
 import Section from "../section/Section";
 import PropTypes from 'prop-types';
-import {Card} from 'react-materialize';
 
 class Board extends Component {
 
@@ -15,12 +14,12 @@ class Board extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if(nextProps.battleground !== this.props.battleground) {
+        if (nextProps.battleground !== this.props.battleground) {
             this.setState({battleground: nextProps.battleground});
         }
     }
 
-    retrieveSection(section){
+    retrieveSection(section) {
         let selection = section.target.getAttribute('value').split(',')
         console.log(selection)
         if (selection[2] == 'clicked' || selection[2] == 'destroyed') {
@@ -60,15 +59,15 @@ class Board extends Component {
 
         var elelemtns = [];
         for (var i = 0; i < sections.length; i++) {
-            elelemtns.push(<Section key={i} status={sections[i][2]} boardtype={this.props.type} section={sections[i]} clickHandler={this.retrieveSection}/>);
+            elelemtns.push(<Section key={i} status={sections[i][2]} boardtype={this.props.type} section={sections[i]}
+                                    clickHandler={this.retrieveSection}/>);
         }
 
         return (
-            <Card className='teal lighten-5 black-text' title={'Battleground'} onClick={this.props.actionHandler} >
-                <div className={"battleground container"}>
-                    {elelemtns}
-                </div>
-            </Card>
+            <div className={"battleground container"} onClick={this.props.actionHandler}>
+                {elelemtns}
+            </div>
+
         );
     }
 

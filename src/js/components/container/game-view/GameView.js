@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import PlayerInfo from "../../presentational/player-info/PlayerInfo";
 import Board from "../../presentational/board/Board";
+import {Card} from 'react-materialize';
 
 const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 const columns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -178,14 +179,20 @@ class GameView extends Component {
                                     attempts={this.state.attempts} endTime={this.state.endTime} hits={this.state.hits}/>
                     </div>
 
-                    <div className={'col l9 m6 s12'}>
-                        <Board className={'col l5 m12 s12'} battleground={this.state.battleground} type={'game'}
-                               actionHandler={this.userActionHandler}/>
+                    <Card className='teal lighten-5 black-text col l9 m6 s12' title={'Battleground'}>
+                        <div className={'row'}>
+                            <div className={'col l6'}>
+                                <Board battleground={this.state.battleground} type={'game'}
+                                       actionHandler={this.userActionHandler}/>
+                            </div>
                         {this.state.showSolution ? (
-                            <Board className={'col l4'} battleground={this.state.battlegroundSolution}
-                                   type={'solution'}/>
+                            <div className={'col l4'}>
+                                <Board battleground={this.state.battlegroundSolution}
+                                       type={'solution'}/>
+                            </div>
                         ) : ( null )}
-                    </div>
+                        </div>
+                    </Card>
 
                 </div>
 
