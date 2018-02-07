@@ -15,6 +15,7 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "max-len": [1, 120, 2, {ignoreComments: true}]
+        "max-len": [1, 120, 2, {ignoreComments: true}],
+        "no-console": 'off'
     }
 };

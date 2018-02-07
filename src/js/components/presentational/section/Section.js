@@ -11,6 +11,23 @@ class Section extends Component {
     }
 
     componentDidMount() {
+        this.setState({
+            className: this.chooseClassName()
+        })
+    }
+
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.status !== this.props.status) {
+            this.setState({status: nextProps.status});
+            this.setState({
+                status: nextProps.status
+            }, () => {
+                this.setState({className: this.chooseClassName()})
+            });
+        }
+    }
+
+    chooseClassName() {
         let className = null;
         if (this.props.status === 'ship') {
             this.props.boardtype === 'game' ? className = 'empty' : className = 'ship';
@@ -19,16 +36,13 @@ class Section extends Component {
         } else if (this.props.status === 'destroyed') {
             className = 'destroyed';
         }
-
-        this.setState({
-            className: className
-        })
+        return className;
     }
 
     render() {
         return (
             <div className={"section"}>
-                <div className={this.state.className}   onClick={this.props.clickHandler} value={this.props.section}>
+                <div className={this.state.className} onClick={this.props.clickHandler} value={this.props.section}>
 
                 </div>
             </div>

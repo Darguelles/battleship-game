@@ -8,6 +8,7 @@ class Board extends Component {
 
     constructor(props) {
         super(props);
+        this.retrieveSection = this.retrieveSection.bind(this);
         this.state = {
             battleground: []
         }
@@ -22,25 +23,35 @@ class Board extends Component {
     retrieveSection(section){
         let selection = section.target.getAttribute('value').split(',')
         console.log(selection)
-        if (section[2] === 'clicked' || section[2] === 'destroyed') {
+        if (selection[2] == 'clicked' || selection[2] == 'destroyed') {
             //do anything
-        } else if (section[2] === 'free') {
-            this.updateBattlewground(section, 'clicked')
+        } else if (selection[2] == 'free') {
+            console.log('free')
+            this.updateBattlewground(selection, 'clicked')
             //this.attemptFailedAction();
-        } else if (section[2] === 'ship') {
-            this.updateBattlewground(section, 'destroyed')
+        } else if (selection[2] == 'ship') {
+            this.updateBattlewground(selection, 'destroyed')
+            console.log('destroyed')
             //this.attemptSuccessAction();
         }
     }
 
     updateBattlewground(section, status) {
         let battleground = this.getBattlegroundFromLocalStorage();
+        console.log(battleground)
+        console.log(section)
         battleground.map(element => {
-            if (element[0] === section[0] && element[1] === section[1]) {
+            if (element[0] === section[0] && element[1] === parseInt(section[1])) {
+                console.log('chi')
                 element[2] = status;
             }
         });
-        this.saveBattlegroundToLocalStorage(battleground);
+
+        this.setState({
+            battleground: battleground
+        }, () => {
+            this.saveBattlegroundToLocalStorage(battleground);
+        });
     }
 
     render() {
@@ -53,8 +64,8 @@ class Board extends Component {
         }
 
         return (
-            <Card className='teal lighten-5 black-text' title={'Battleground'}>
-                <div className={"battleground"}>
+            <Card className='teal lighten-5 black-text' title={'Battleground'} onClick={this.props.actionHandler} >
+                <div className={"battleground container"}>
                     {elelemtns}
                 </div>
             </Card>
@@ -72,7 +83,8 @@ class Board extends Component {
 
 Board.propTypes = {
     battleground: PropTypes.array,
-    type: PropTypes.string
+    type: PropTypes.string,
+    actionHandler: PropTypes.func
 };
 
 export default Board;

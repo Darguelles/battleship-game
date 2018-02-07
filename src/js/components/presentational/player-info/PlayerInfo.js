@@ -9,15 +9,6 @@ class PlayerInfo extends Component {
         super(props);
     }
 
-/*    componentDidMount(){
-        this.setState({
-            attempts: this.props.attempts,
-            hits: this.props.hits,
-            failures: this.props.failures,
-            endTime: this.props.endTime
-        })
-    }*/
-
     render() {
         let loader = null;
         if (this.props.attempts === 'INFINITE') {
