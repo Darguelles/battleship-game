@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import './Board.scss'
 import Section from "../section/Section";
 import PropTypes from 'prop-types';
+import Helpers from "../../container/helpers";
 
 class Board extends Component {
 
@@ -37,7 +38,7 @@ class Board extends Component {
     }
 
     updateBattlewground(section, status) {
-        let battleground = this.getBattlegroundFromLocalStorage();
+        let battleground = Helpers.getFromLocalStorage('battleground');
         battleground.map(element => {
             if (element[0] === section[0] && element[1] === parseInt(section[1])) {
                 element[2] = status;
@@ -47,7 +48,7 @@ class Board extends Component {
         this.setState({
             battleground: battleground
         }, () => {
-            this.saveBattlegroundToLocalStorage(battleground);
+            Helpers.saveToLocalStorage(battleground, 'battleground')
         });
     }
 
@@ -64,14 +65,6 @@ class Board extends Component {
                 {elelemtns}
             </div>
         );
-    }
-
-    getBattlegroundFromLocalStorage() {
-        return JSON.parse(window.localStorage.getItem('battleground'));
-    }
-
-    saveBattlegroundToLocalStorage(battleground) {
-        window.localStorage.setItem('battleground', JSON.stringify(battleground));
     }
 }
 

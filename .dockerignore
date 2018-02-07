@@ -1,0 +1,9 @@
+# Files
+Dockerfile
+.dockerignore
+.gitignore
+README.md
+
+# Folders
+build
+node_modules

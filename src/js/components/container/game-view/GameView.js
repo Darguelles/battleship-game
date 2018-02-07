@@ -181,7 +181,6 @@ class GameView extends Component {
     }
 
     render() {
-
         return (
             <div className={'container'}>
                 <div className={'row'}>

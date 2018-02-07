@@ -50,7 +50,7 @@ class NewGame extends Component {
         };
         if (playerInfo.playerName !== '' && playerInfo.attempts !== '') {
             Helpers.saveToLocalStorage(playerInfo, 'playerInfo')
-            this.props.history.push("play");
+            window.location="play";
         }
     }
 
