@@ -1,6 +1,6 @@
 import {configure, shallow} from 'enzyme';
 import React from 'react';
-import NewGame from '../js/components/container/new-game/NewGame'
+import NewGame from '../container/new-game/NewGame'
 import renderer from 'react-test-renderer';
 import toJson from 'enzyme-to-json';
 import Adapter from 'enzyme-adapter-react-16';
