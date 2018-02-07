@@ -7,30 +7,39 @@ class PlayerInfo extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+    }
+
+/*    componentDidMount(){
+        this.setState({
             attempts: this.props.attempts,
             hits: this.props.hits,
             failures: this.props.failures,
             endTime: this.props.endTime
-        };
-    }
+        })
+    }*/
 
     render() {
+        let loader = null;
+        if (this.props.attempts === 'INFINITE') {
+            loader = <ProgressBar progress={100}/>
+        } else {
+            loader = <ProgressBar progress={parseInt(this.props.attempts)}/>
+        }
+
         return (
             <Card className='teal lighten-5 black-text' title={this.props.playerName}>
                 <div className={"player-info"}>
                     <h6>Turns</h6>
-                    <label>{this.state.attempts}</label>
-                    <ProgressBar progress={this.state.attempts}/>
+                    <label>{this.props.attempts}</label>
+                    {loader}
                     <h6>Hits</h6>
-                    <label className={"hit"}>{this.state.hits}</label>
+                    <label className={"hit"}>{this.props.hits}</label>
                     <h6>Failures</h6>
-                    <label className={"failure"}>{this.state.failures}</label>
+                    <label className={"failure"}>{this.props.failures}</label>
                     <h6>Start time</h6>
-                    <label>${this.state.startTime}</label>
-
+                    <label>${this.props.startTime}</label>
                     <h6>Emd time</h6>
-                    <label>${this.state.endTime}</label>
+                    <label>${this.props.endTime}</label>
                 </div>
             </Card>
         );
@@ -39,10 +48,11 @@ class PlayerInfo extends Component {
 
 PlayerInfo.propTypes = {
     playerName: PropTypes.string,
-    attempts: PropTypes.number,
+    attempts: PropTypes.any,
     hits: PropTypes.number,
     failures: PropTypes.number,
-    endTime: PropTypes.string
+    startTime: PropTypes.string,
+    endTime: PropTypes.string,
 };
 
 export default PlayerInfo;

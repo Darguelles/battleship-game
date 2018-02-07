@@ -1,0 +1,41 @@
+$container-size: 30px;
+
+%fixed-size {
+  height: $container-size;
+  width: $container-size;
+}
+
+.section {
+  @extend %fixed-size;
+  display: inline-block;
+  margin-left: 4px;
+
+  .ship{
+    @extend %fixed-size;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background-color: darkslategray;
+  }
+
+  .empty{
+    @extend %fixed-size;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background-color: lightblue;
+  }
+
+  .destroyed{
+    @extend %fixed-size;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background-color: orangered;
+  }
+
+  .game{
+    @extend %fixed-size;
+    border-radius: 50%;
+    border: 3px solid #000;
+    background-color: lightblue;
+  }
+
+}
