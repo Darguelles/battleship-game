@@ -6,10 +6,6 @@ import NewGame from "../new-game/NewGame";
 class HomeContainer extends Component {
     constructor() {
         super();
-        this.state = {
-            title: "",
-            hey: []
-        };
     }
 
     render() {

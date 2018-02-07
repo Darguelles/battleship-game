@@ -10,7 +10,7 @@ class App extends Component {
         return (
             <div>
                 <Header/>
-                <BrowserRouter >
+                <BrowserRouter>
                     <div>
                         <Switch>
                             <Route exact path="/" component={HomeContainer}/>
