@@ -20,7 +20,7 @@ class HomeContainer extends Component {
                         <NewGame className={'button'} />
                     </div>
                     <div className={'col l12 m12 s12'}>
-                        <Button waves='light' className={'button'}>Load game<Icon left>save</Icon></Button>
+                        <Button waves='light' className={'button'}>Load game<Icon left>autorenew</Icon></Button>
                     </div>
 
                 </div>
