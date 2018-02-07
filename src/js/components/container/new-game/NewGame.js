@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import {Button, Icon, Input, Modal, Row} from 'react-materialize';
 import PropTypes from 'prop-types';
 import {withRouter} from "react-router-dom";
+import Helpers from "../helpers";
 
 class NewGame extends Component {
 
@@ -35,16 +36,21 @@ class NewGame extends Component {
         })
     }
 
+    deletePreviousGames(){
+        Helpers.deleteFromLocalStorage('playerInfo', 'battleground', 'battlegroundSolution')
+    }
+
     startGame() {
+        this.deletePreviousGames()
         let playerInfo = {
             'playerName': this.state.gameName,
             'attempts': this.state.attempts,
-            'startTime': new Date(),
+            'startTime': Helpers.getCurrentDate(),
             'hits': 0,
             'failures': 0
         };
         if (playerInfo.playerName !== '' && playerInfo.attempts !== '') {
-            window.localStorage.setItem('playerInfo', JSON.stringify(playerInfo));
+            Helpers.saveToLocalStorage(playerInfo, 'playerInfo')
             this.props.history.push("play");
         }
     }

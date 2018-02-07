@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import PlayerInfo from "../../presentational/player-info/PlayerInfo";
 import Board from "../../presentational/board/Board";
 import {Card} from 'react-materialize';
+import Helpers from '../helpers'
 
 const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 const columns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -21,7 +22,6 @@ class GameView extends Component {
         this.failedClick = this.failedClick.bind(this)
         this.userActionHandler = this.userActionHandler.bind(this)
         this.state = {
-            player: null,
             battleground: [],
             battlegroundSolution: [],
             showSolution: false
@@ -35,34 +35,35 @@ class GameView extends Component {
             failures: recoveredGame.failures,
             attempts: recoveredGame.attempts,
             hits: recoveredGame.hits,
-            endTime: recoveredGame.endTime
+            startTime: recoveredGame.startTime,
+            endTime: recoveredGame.endTime == null ? 'IN PROGRESS' : recoveredGame.endTime
         });
         this.createBattleground();
     }
 
 
     putShipOnBattleground(ship) {
-        let orientation = direction[this.getRandomInt(0, 2)];
+        let orientation = direction[Helpers.getRandomInt(0, 2)];
         let shipRow;
         let shipColumn;
-        let positions = []
+        let positions = [];
 
         if (orientation === 'vertical') {
-            shipRow = this.getRandomInt(0, (9 - ship));
-            shipColumn = this.getRandomInt(1, (columns.length - 1));
+            shipRow = Helpers.getRandomInt(0, (9 - ship));
+            shipColumn = Helpers.getRandomInt(1, (columns.length - 1));
             for (let i = 0; i < ship; i++) {
-                let position = {'row': rows[shipRow + i], 'column': shipColumn}
+                let position = {'row': rows[shipRow + i], 'column': shipColumn};
                 positions.push(position);
             }
         } else {
-            shipRow = this.getRandomInt(0, 9);
-            shipColumn = this.getRandomInt(1, (columns.length - ship));
+            shipRow = Helpers.getRandomInt(0, 9);
+            shipColumn = Helpers.getRandomInt(1, (columns.length - ship));
             for (let i = 0; i < ship; i++) {
-                let position = {'row': rows[shipRow], 'column': shipColumn + i}
+                let position = {'row': rows[shipRow], 'column': shipColumn + i};
                 positions.push(position);
             }
         }
-        if (this.areRepeatedPositions(shipPositions, positions)) {
+        if (Helpers.areRepeatedPositions(shipPositions, positions)) {
             //Retry
             this.putShipOnBattleground(ship);
         } else {
@@ -79,9 +80,8 @@ class GameView extends Component {
     }
 
     createBattleground() {
-
         let recoveredBattleground = window.localStorage.getItem('battleground');
-        if (recoveredBattleground === undefined) {
+        if (recoveredBattleground === null) {
             this.defineShipLocations();
             this.setState({
                 battleground: this.createBattlegroundMatrix()
@@ -100,6 +100,21 @@ class GameView extends Component {
         }
     }
 
+    createBattlegroundMatrix() {
+        let battleground = []
+        rows.map(row => {
+            columns.map(column => {
+                let position = {'row': row, 'column': column};
+                if (Helpers.haveShip(shipPositions, position)) {
+                    battleground.push([row, column, 'ship'])
+                } else {
+                    battleground.push([row, column, 'free'])
+                }
+            });
+        });
+        return battleground;
+    }
+
 
     failedClick(player) {
         if (player.attempts < 1) {
@@ -112,7 +127,7 @@ class GameView extends Component {
                 failures: player.failures
             }, () => {
                 window.localStorage.setItem('playerInfo', JSON.stringify(player));
-                this.showToast(failMessages[this.getRandomInt(0, (failMessages.length - 1 ))])
+                Helpers.showToast(failMessages[Helpers.getRandomInt(0, (failMessages.length - 1 ))])
             });
         }
     }
@@ -129,15 +144,14 @@ class GameView extends Component {
                 hits: player.hits
             }, () => {
                 window.localStorage.setItem('playerInfo', JSON.stringify(player));
-                this.showToast(successMessages[this.getRandomInt(0, (successMessages.length - 1 ))])
+                Helpers.showToast(successMessages[Helpers.getRandomInt(0, (successMessages.length - 1 ))])
             });
         }
     }
 
     gameOver(player) {
         const battlegroundSolution = JSON.parse(window.localStorage.getItem('battlegroundSolution'));
-        //let battleground = JSON.parse(window.localStorage.getItem('battleground'));
-        player.endTime = '';
+        player.endTime = Helpers.getCurrentDate();
         this.setState({
             showSolution: true,
             endTime: player.endTime
@@ -146,7 +160,7 @@ class GameView extends Component {
                 battlegroundSolution: battlegroundSolution
             }, () => {
                 window.localStorage.setItem('playerInfo', JSON.stringify(player));
-                this.showToast('GAME OVER');
+                Helpers.showToast('GAME OVER');
             });
         });
     }
@@ -154,19 +168,14 @@ class GameView extends Component {
 
     userActionHandler(value) {
         let player = JSON.parse(window.localStorage.getItem('playerInfo'))
-        console.log(value.target)
         let className = value.target.getAttribute('class')
-        console.log(className)
-        if (className === 'ship') {
+        let sectVal = value.target.getAttribute('value')
+        if (sectVal.includes('ship')) {
             this.successClick(player);
         }
         else if (className === 'empty') {
             this.failedClick(player);
         }
-    }
-
-    showToast(message) {
-        window.Materialize.toast(message, 4000)
     }
 
     render() {
@@ -175,66 +184,28 @@ class GameView extends Component {
             <div className={'container'}>
                 <div className={'row'}>
                     <div className={'col l3 m12 s12'}>
-                        <PlayerInfo playerName={this.state.playerName} failures={this.state.failures}
+                        <PlayerInfo playerName={this.state.playerName} failures={this.state.failures} startTime={this.state.startTime}
                                     attempts={this.state.attempts} endTime={this.state.endTime} hits={this.state.hits}/>
                     </div>
-
-                    <Card className='teal lighten-5 black-text col l9 m6 s12' title={'Battleground'}>
+                    <Card className='teal lighten-5 black-text col l9 m12 s12' title={'Battleground'}>
                         <div className={'row'}>
-                            <div className={'col l6'}>
+                            <div className={'col l6 m12 s12'}>
                                 <Board battleground={this.state.battleground} type={'game'}
                                        actionHandler={this.userActionHandler}/>
                             </div>
                         {this.state.showSolution ? (
-                            <div className={'col l4'}>
+                            <div className={'col l4 m12 s12'}>
                                 <Board battleground={this.state.battlegroundSolution}
                                        type={'solution'}/>
                             </div>
                         ) : ( null )}
                         </div>
                     </Card>
-
                 </div>
-
             </div>
-
         );
     }
 
-    getRandomInt(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-
-    areRepeatedPositions(array, array2) {
-        let result = false;
-        array.map(first => {
-            array2.map(second => {
-                if (first.row === second.row && first.column === second.column) {
-                    result = true;
-                }
-            });
-        });
-        return result;
-    }
-
-    haveShip(arr, val) {
-        return arr.some(pos => pos.row == val.row && pos.column == val.column);
-    }
-
-    createBattlegroundMatrix() {
-        let battleground = []
-        rows.map(row => {
-            columns.map(column => {
-                let position = {'row': row, 'column': column}
-                if (this.haveShip(shipPositions, position)) {
-                    battleground.push([row, column, 'ship'])
-                } else {
-                    battleground.push([row, column, 'free'])
-                }
-            });
-        });
-        return battleground;
-    }
 }
 
 export default GameView;

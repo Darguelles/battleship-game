@@ -13,6 +13,12 @@ class Board extends Component {
         }
     }
 
+    componentDidMount() {
+        this.setState({
+            battleground: this.props.battleground
+        })
+    }
+
     componentWillReceiveProps(nextProps) {
         if (nextProps.battleground !== this.props.battleground) {
             this.setState({battleground: nextProps.battleground});
@@ -21,27 +27,19 @@ class Board extends Component {
 
     retrieveSection(section) {
         let selection = section.target.getAttribute('value').split(',')
-        console.log(selection)
-        if (selection[2] == 'clicked' || selection[2] == 'destroyed') {
+        if (selection[2] === 'clicked' || selection[2] === 'destroyed') {
             //do anything
-        } else if (selection[2] == 'free') {
-            console.log('free')
+        } else if (selection[2] === 'free') {
             this.updateBattlewground(selection, 'clicked')
-            //this.attemptFailedAction();
-        } else if (selection[2] == 'ship') {
+        } else if (selection[2] === 'ship') {
             this.updateBattlewground(selection, 'destroyed')
-            console.log('destroyed')
-            //this.attemptSuccessAction();
         }
     }
 
     updateBattlewground(section, status) {
         let battleground = this.getBattlegroundFromLocalStorage();
-        console.log(battleground)
-        console.log(section)
         battleground.map(element => {
             if (element[0] === section[0] && element[1] === parseInt(section[1])) {
-                console.log('chi')
                 element[2] = status;
             }
         });
@@ -54,20 +52,17 @@ class Board extends Component {
     }
 
     render() {
-
         let sections = this.state.battleground;
 
-        var elelemtns = [];
+        let elelemtns = [];
         for (var i = 0; i < sections.length; i++) {
             elelemtns.push(<Section key={i} status={sections[i][2]} boardtype={this.props.type} section={sections[i]}
                                     clickHandler={this.retrieveSection}/>);
         }
-
         return (
             <div className={"battleground container"} onClick={this.props.actionHandler}>
                 {elelemtns}
             </div>
-
         );
     }
 

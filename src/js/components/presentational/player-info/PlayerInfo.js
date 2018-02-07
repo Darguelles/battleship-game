@@ -28,9 +28,9 @@ class PlayerInfo extends Component {
                     <h6>Failures</h6>
                     <label className={"failure"}>{this.props.failures}</label>
                     <h6>Start time</h6>
-                    <label>${this.props.startTime}</label>
+                    <label>{this.props.startTime}</label>
                     <h6>Emd time</h6>
-                    <label>${this.props.endTime}</label>
+                    <label>{this.props.endTime}</label>
                 </div>
             </Card>
         );
