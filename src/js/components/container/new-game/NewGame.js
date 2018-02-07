@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Button, Icon, Input, Modal, Row} from 'react-materialize';
 import PropTypes from 'prop-types';
-import {withRouter} from "react-router-dom";
 import Helpers from "../helpers";
 
 class NewGame extends Component {
@@ -93,4 +92,4 @@ NewGame.propTypes = {
     history: PropTypes.object,
 };
 
-export default withRouter(NewGame);
+export default NewGame;

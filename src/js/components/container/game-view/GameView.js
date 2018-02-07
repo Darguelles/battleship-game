@@ -29,16 +29,18 @@ class GameView extends Component {
     }
 
     componentDidMount() {
-        let recoveredGame = JSON.parse(window.localStorage.getItem('playerInfo'))
-        this.setState({
-            playerName: recoveredGame.playerName,
-            failures: recoveredGame.failures,
-            attempts: recoveredGame.attempts,
-            hits: recoveredGame.hits,
-            startTime: recoveredGame.startTime,
-            endTime: recoveredGame.endTime == null ? 'IN PROGRESS' : recoveredGame.endTime
-        });
-        this.createBattleground();
+        let recoveredGame = Helpers.getFromLocalStorage('playerInfo');
+        if(recoveredGame !== null){
+            this.setState({
+                playerName: recoveredGame.playerName,
+                failures: recoveredGame.failures,
+                attempts: recoveredGame.attempts,
+                hits: recoveredGame.hits,
+                startTime: recoveredGame.startTime,
+                endTime: recoveredGame.endTime == null ? 'IN PROGRESS' : recoveredGame.endTime
+            });
+            this.createBattleground();
+        }
     }
 
 
