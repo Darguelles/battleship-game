@@ -1,16 +1,14 @@
-FROM node:7.8.0
+FROM node:9.4
 
-ENV NPM_CONFIG_LOGLEVEL warn
+EXPOSE 8080
+RUN mkdir /usr/src/app
+WORKDIR /usr/src/app
 
-RUN npm install -g serve
-CMD serve -s build
-EXPOSE 5000
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
-COPY package.json package.json
-COPY npm-shrinkwrap.json npm-shrinkwrap.json
+ADD package.json /usr/src/app/package.json
 RUN npm install
 
-COPY . .
+COPY . /usr/src/app
 
-# Build for production.
-RUN npm run build --production
+CMD ["npm", "start"]
