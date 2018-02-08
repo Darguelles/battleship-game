@@ -24,8 +24,6 @@ describe('GameView > componentDidMount', () => {
         const spy = jest.spyOn(GameView.prototype, 'componentDidMount');
         const wrapper = mount(<GameView/>);
         expect(spy).toHaveBeenCalled();
-        spy.mockReset();
-        spy.mockRestore();
     });
 
 });

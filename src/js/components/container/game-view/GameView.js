@@ -30,7 +30,7 @@ class GameView extends Component {
 
     componentDidMount() {
         let recoveredGame = Helpers.getFromLocalStorage('playerInfo');
-        if(recoveredGame !== null){
+        if (recoveredGame !== null) {
             this.setState({
                 playerName: recoveredGame.playerName,
                 failures: recoveredGame.failures,
@@ -172,7 +172,7 @@ class GameView extends Component {
         let player = JSON.parse(window.localStorage.getItem('playerInfo'))
         let className = value.target.getAttribute('class')
         let sectVal = value.target.getAttribute('value')
-        if (sectVal.includes('ship')) {
+        if (sectVal !== null && sectVal.includes('ship')) {
             this.successClick(player);
         }
         else if (className === 'empty') {
@@ -185,21 +185,22 @@ class GameView extends Component {
             <div className={'container'}>
                 <div className={'row'}>
                     <div className={'col l3 m12 s12'}>
-                        <PlayerInfo playerName={this.state.playerName} failures={this.state.failures} startTime={this.state.startTime}
+                        <PlayerInfo playerName={this.state.playerName} failures={this.state.failures}
+                                    startTime={this.state.startTime}
                                     attempts={this.state.attempts} endTime={this.state.endTime} hits={this.state.hits}/>
                     </div>
                     <Card className='teal lighten-5 black-text col l9 m12 s12' title={'Battleground'}>
                         <div className={'row'}>
                             <div className={'col l6 m12 s12'}>
-                                <Board battleground={this.state.battleground} type={'game'}
+                                <Board battleground={this.state.battleground} type={'game'} id={'game-battleground'}
                                        actionHandler={this.userActionHandler}/>
                             </div>
-                        {this.state.showSolution ? (
-                            <div className={'col l4 m12 s12'}>
-                                <Board battleground={this.state.battlegroundSolution}
-                                       type={'solution'}/>
-                            </div>
-                        ) : ( null )}
+                            {this.state.showSolution ? (
+                                <div className={'col l4 m12 s12'}>
+                                    <Board battleground={this.state.battlegroundSolution}
+                                           type={'solution'}/>
+                                </div>
+                            ) : ( null )}
                         </div>
                     </Card>
                 </div>
