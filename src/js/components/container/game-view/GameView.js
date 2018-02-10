@@ -14,12 +14,11 @@ const failMessages = ['Oops!', 'Try to make it better', 'Bad shoot', 'ZzzZzzz!']
 
 let shipPositions = []
 
-const service =  new GameService();
-
 class GameView extends Component {
 
     constructor() {
         super();
+        this.service =  new GameService();
         this.successClick = this.successClick.bind(this)
         this.failedClick = this.failedClick.bind(this)
         this.userActionHandler = this.userActionHandler.bind(this)
@@ -49,7 +48,8 @@ class GameView extends Component {
     }
 
     startGame() {
-        let savedBattleground = service.getSavedGame();
+        let savedBattleground = this.service.getSavedGame();
+        console.log(savedBattleground)
         if (savedBattleground === null) {
             this.createBattleground();
         } else {
@@ -62,13 +62,13 @@ class GameView extends Component {
     createBattleground() {
         this.defineShipLocations();
         this.setState({
-            battleground: service.createBattlegroundMatrix(rows, columns, shipPositions)
+            battleground: this.service.createBattlegroundMatrix(rows, columns, shipPositions)
         }, () => {
             this.setState({
                 battlegroundSolution: this.state.battleground
             }, () => {
-                service.saveBattleground(this.state.battleground)
-                service.saveSolution(this.state.battleground)
+                this.service.saveBattleground(this.state.battleground)
+                this.service.saveSolution(this.state.battleground)
             });
         });
     }
@@ -80,7 +80,7 @@ class GameView extends Component {
     }
 
     putShipOnBattleground(ship) {
-        let shipLocation = service.retrieveShipPositions(ship, columns, rows)
+        let shipLocation = this.service.retrieveShipPositions(ship, columns, rows)
         if (Helpers.areRepeatedPositions(shipPositions, shipLocation)) {
             //Retry
             this.putShipOnBattleground(ship);
@@ -180,7 +180,6 @@ class GameView extends Component {
             </div>
         );
     }
-
 }
 
 export default GameView;

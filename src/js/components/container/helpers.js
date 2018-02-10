@@ -33,7 +33,7 @@ export default class Helpers {
     }
 
     static getUnparsedObjectFromLocalStorage(key) {
-        return JSON.parse(window.localStorage.getItem(key))
+        return window.localStorage.getItem(key)
     }
 
     static deleteFromLocalStorage(...keys) {
