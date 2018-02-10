@@ -38,7 +38,7 @@ class Board extends Component {
     }
 
     updateBattlewground(section, status) {
-        let battleground = Helpers.getFromLocalStorage('battleground');
+        let battleground = Helpers.getParsedObjectFromLocalStorage('battleground');
         battleground.map(element => {
             if (element[0] === section[0] && element[1] === parseInt(section[1])) {
                 element[2] = status;

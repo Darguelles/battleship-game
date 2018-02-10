@@ -28,7 +28,11 @@ export default class Helpers {
         window.localStorage.setItem(key, JSON.stringify(element));
     }
 
-    static getFromLocalStorage(key) {
+    static getParsedObjectFromLocalStorage(key) {
+        return JSON.parse(window.localStorage.getItem(key))
+    }
+
+    static getUnparsedObjectFromLocalStorage(key) {
         return JSON.parse(window.localStorage.getItem(key))
     }
 

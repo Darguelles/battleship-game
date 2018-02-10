@@ -13,7 +13,7 @@ class HomeContainer extends Component {
     }
 
     loadGame(){
-        let savedGame = Helpers.getFromLocalStorage('playerInfo');
+        let savedGame = Helpers.getParsedObjectFromLocalStorage('playerInfo');
         if(savedGame!==null){
             window.location = "play";
         }else{

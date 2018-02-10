@@ -3,16 +3,18 @@ import PlayerInfo from "../../presentational/player-info/PlayerInfo";
 import Board from "../../presentational/board/Board";
 import {Card} from 'react-materialize';
 import Helpers from '../helpers'
+import GameService from '../../../services/game/GameService'
 
 const rows = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J']
 const columns = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
-const direction = ['vertical', 'horizontal'];
 
 const successMessages = ['Nice shoot!', 'Good!', 'The devil is released!', 'Awesome!'];
 const failMessages = ['Oops!', 'Try to make it better', 'Bad shoot', 'ZzzZzzz!'];
 
 let shipPositions = []
+
+const service =  new GameService();
 
 class GameView extends Component {
 
@@ -29,50 +31,46 @@ class GameView extends Component {
     }
 
     componentDidMount() {
-        let recoveredGame = Helpers.getFromLocalStorage('playerInfo');
-        if (recoveredGame !== null) {
+        let playerInfo = Helpers.getParsedObjectFromLocalStorage('playerInfo');
+        if (playerInfo !== null) {
             this.setState({
-                playerName: recoveredGame.playerName,
-                failures: recoveredGame.failures,
-                attempts: recoveredGame.attempts,
-                hits: recoveredGame.hits,
-                startTime: recoveredGame.startTime,
-                endTime: recoveredGame.endTime == null ? 'IN PROGRESS' : recoveredGame.endTime
+                playerName: playerInfo.playerName,
+                failures: playerInfo.failures,
+                attempts: playerInfo.attempts,
+                hits: playerInfo.hits,
+                startTime: playerInfo.startTime,
+                endTime: playerInfo.endTime == null ? 'IN PROGRESS' : playerInfo.endTime
             });
-            this.createBattleground();
+            this.startGame();
+        } else{
+            Helpers.showToast('No game created yet!')
+            //TODO Take to new game scene
         }
     }
 
-
-    putShipOnBattleground(ship) {
-        let orientation = direction[Helpers.getRandomInt(0, 2)];
-        let shipRow;
-        let shipColumn;
-        let positions = [];
-
-        if (orientation === 'vertical') {
-            shipRow = Helpers.getRandomInt(0, (9 - ship));
-            shipColumn = Helpers.getRandomInt(1, (columns.length - 1));
-            for (let i = 0; i < ship; i++) {
-                let position = {'row': rows[shipRow + i], 'column': shipColumn};
-                positions.push(position);
-            }
+    startGame() {
+        let savedBattleground = service.getSavedGame();
+        if (savedBattleground === null) {
+            this.createBattleground();
         } else {
-            shipRow = Helpers.getRandomInt(0, 9);
-            shipColumn = Helpers.getRandomInt(1, (columns.length - ship));
-            for (let i = 0; i < ship; i++) {
-                let position = {'row': rows[shipRow], 'column': shipColumn + i};
-                positions.push(position);
-            }
+            this.setState({
+                battleground: JSON.parse(savedBattleground)
+            })
         }
-        if (Helpers.areRepeatedPositions(shipPositions, positions)) {
-            //Retry
-            this.putShipOnBattleground(ship);
-        } else {
-            positions.map(position =>
-                shipPositions.push(position)
-            );
-        }
+    }
+
+    createBattleground() {
+        this.defineShipLocations();
+        this.setState({
+            battleground: service.createBattlegroundMatrix(rows, columns, shipPositions)
+        }, () => {
+            this.setState({
+                battlegroundSolution: this.state.battleground
+            }, () => {
+                service.saveBattleground(this.state.battleground)
+                service.saveSolution(this.state.battleground)
+            });
+        });
     }
 
     defineShipLocations() {
@@ -81,42 +79,17 @@ class GameView extends Component {
         });
     }
 
-    createBattleground() {
-        let recoveredBattleground = window.localStorage.getItem('battleground');
-        if (recoveredBattleground === null) {
-            this.defineShipLocations();
-            this.setState({
-                battleground: this.createBattlegroundMatrix()
-            }, () => {
-                this.setState({
-                    battlegroundSolution: this.state.battleground
-                }, () => {
-                    window.localStorage.setItem('battleground', JSON.stringify(this.state.battleground));
-                    window.localStorage.setItem('battlegroundSolution', JSON.stringify(this.state.battleground));
-                });
-            });
+    putShipOnBattleground(ship) {
+        let shipLocation = service.retrieveShipPositions(ship, columns, rows)
+        if (Helpers.areRepeatedPositions(shipPositions, shipLocation)) {
+            //Retry
+            this.putShipOnBattleground(ship);
         } else {
-            this.setState({
-                battleground: JSON.parse(recoveredBattleground)
-            })
+            shipLocation.map(position =>
+                shipPositions.push(position)
+            );
         }
     }
-
-    createBattlegroundMatrix() {
-        let battleground = []
-        rows.map(row => {
-            columns.map(column => {
-                let position = {'row': row, 'column': column};
-                if (Helpers.haveShip(shipPositions, position)) {
-                    battleground.push([row, column, 'ship'])
-                } else {
-                    battleground.push([row, column, 'free'])
-                }
-            });
-        });
-        return battleground;
-    }
-
 
     failedClick(player) {
         if (player.attempts < 1) {
