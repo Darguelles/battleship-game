@@ -18,9 +18,7 @@ class GameView extends Component {
 
     constructor() {
         super();
-        this.service =  new GameService();
-        this.successClick = this.successClick.bind(this)
-        this.failedClick = this.failedClick.bind(this)
+        this.service = new GameService();
         this.userActionHandler = this.userActionHandler.bind(this)
         this.state = {
             battleground: [],
@@ -41,7 +39,7 @@ class GameView extends Component {
                 endTime: playerInfo.endTime == null ? 'IN PROGRESS' : playerInfo.endTime
             });
             this.startGame();
-        } else{
+        } else {
             Helpers.showToast('No game created yet!')
             //TODO Take to new game scene
         }
@@ -49,7 +47,6 @@ class GameView extends Component {
 
     startGame() {
         let savedBattleground = this.service.getSavedGame();
-        console.log(savedBattleground)
         if (savedBattleground === null) {
             this.createBattleground();
         } else {
@@ -91,41 +88,8 @@ class GameView extends Component {
         }
     }
 
-    failedClick(player) {
-        if (player.attempts < 1) {
-            this.gameOver(player);
-        } else {
-            player.attempts !== 'INFINITE' ? player.attempts-- : 'INFINITE';
-            player.failures++;
-            this.setState({
-                attempts: player.attempts,
-                failures: player.failures
-            }, () => {
-                window.localStorage.setItem('playerInfo', JSON.stringify(player));
-                Helpers.showToast(failMessages[Helpers.getRandomInt(0, (failMessages.length - 1 ))])
-            });
-        }
-    }
-
-    successClick(player) {
-        if (player.attempts < 1) {
-            this.gameOver(player);
-        } else {
-            player.attempts !== 'INFINITE' ? player.attempts-- : 'INFINITE';
-            player.hits++
-
-            this.setState({
-                attempts: player.attempts,
-                hits: player.hits
-            }, () => {
-                window.localStorage.setItem('playerInfo', JSON.stringify(player));
-                Helpers.showToast(successMessages[Helpers.getRandomInt(0, (successMessages.length - 1 ))])
-            });
-        }
-    }
-
     gameOver(player) {
-        const battlegroundSolution = JSON.parse(window.localStorage.getItem('battlegroundSolution'));
+        const battlegroundSolution = Helpers.getParsedObjectFromLocalStorage('battlegroundSolution');
         player.endTime = Helpers.getCurrentDate();
         this.setState({
             showSolution: true,
@@ -134,22 +98,34 @@ class GameView extends Component {
             this.setState({
                 battlegroundSolution: battlegroundSolution
             }, () => {
-                window.localStorage.setItem('playerInfo', JSON.stringify(player));
+                Helpers.saveToLocalStorage('playerInfo', player);
                 Helpers.showToast('GAME OVER');
             });
         });
     }
 
+    processAction(player) {
+        this.setState({
+            attempts: player.attempts,
+            hits: player.hits,
+            failures: player.failures
+        });
+    }
 
     userActionHandler(value) {
-        let player = JSON.parse(window.localStorage.getItem('playerInfo'))
-        let className = value.target.getAttribute('class')
-        let sectVal = value.target.getAttribute('value')
-        if (sectVal !== null && sectVal.includes('ship')) {
-            this.successClick(player);
-        }
-        else if (className === 'empty') {
-            this.failedClick(player);
+        let player = Helpers.getParsedObjectFromLocalStorage('playerInfo');
+        let className = value.target.getAttribute('class');
+        let sectVal = value.target.getAttribute('value');
+        if (player.attempts < 1) {
+            this.gameOver(player);
+        } else if (sectVal !== null && sectVal.includes('ship')) {
+            player = this.service.saveAction(player, 'SUCCESS');
+            this.processAction(player);
+            Helpers.showToast(successMessages[Helpers.getRandomInt(0, (successMessages.length - 1 ))])
+        } else if (className === 'empty') {
+            player = this.service.saveAction(player, 'FAILURE');
+            this.processAction(player);
+            Helpers.showToast(failMessages[Helpers.getRandomInt(0, (failMessages.length - 1 ))])
         }
     }
 

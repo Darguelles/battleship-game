@@ -1,6 +1,7 @@
 import Helpers from "../../components/container/helpers";
 
 const direction = ['vertical', 'horizontal'];
+
 export default class GameService {
 
     getSavedGame() {
@@ -46,12 +47,20 @@ export default class GameService {
         return battleground;
     }
 
-    saveBattleground(battleground){
+    saveAction(player, action){
+        player.attempts !== 'INFINITE' ? player.attempts-- : 'INFINITE';
+        action === 'SUCCESS' ? player.hits++ : player.failures++;
+        Helpers.saveToLocalStorage(player, 'playerInfo');
+        return player;
+    }
+
+    saveBattleground(battleground) {
         Helpers.saveToLocalStorage(battleground, 'battleground')
     }
 
-    saveSolution(battleground){
+    saveSolution(battleground) {
         Helpers.saveToLocalStorage(battleground, 'battlegroundSolution')
     }
+
 
 }
